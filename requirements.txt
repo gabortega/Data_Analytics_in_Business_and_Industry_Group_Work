@@ -5,3 +5,4 @@ kmodes
 tqdm
 matplotlib
 seaborn
+yellowbrick

@@ -23,6 +23,7 @@ from matplotlib import pyplot as plt
 from matplotlib.collections import LineCollection
 import seaborn as sns
 
+from yellowbrick.cluster.elbow import kelbow_visualizer
 
 ##############################################################
 ##############################################################
@@ -323,6 +324,10 @@ dmp.run()
 
 # K-Means cluster & Plot
 data_processed = pd.read_csv("processed_data.csv")
+
+# use elbow plot to determine number of clusters
+kelbow_visualizer(skcluster.KMeans(), data_processed, k=(1, 14))
+
 kmeans_pred = (skcluster.KMeans(n_clusters=4, random_state=0, n_init="auto")
                .fit_predict(skpreproc.StandardScaler().fit_transform(data_processed)))
 
@@ -332,6 +337,16 @@ plt.scatter(data_processed[x_label], data_processed[y_label], c=kmeans_pred)
 plt.xlabel(x_label)
 plt.ylabel(y_label)
 plt.title("Plot")
+plt.show()
+
+# calculate cluster means and plot bar charts to compare cluster statistics
+data_agg = data_processed.copy()
+data_agg['cluster'] = kmeans_pred
+data_agg = data_agg.groupby('cluster').mean().reset_index()
+data_agg = data_agg.melt(id_vars='cluster')
+
+g = sns.FacetGrid(data_agg, col='variable', hue='cluster', col_wrap=5, height=2, sharey=False)
+g = g.map(plt.bar, 'cluster', 'value').set_titles("{col_name}")
 plt.show()
 
 # count distinct offer types
