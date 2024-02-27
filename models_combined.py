@@ -311,6 +311,7 @@ class DataMergeProcessor:
         (data_processed["offers_completion_ratio"]
          .fillna(0.0, inplace=True))
         # Save to CSV
+        data_processed = data_processed.reset_index()
         data_processed.to_csv("processed_data_combined.csv", index=False)
 
 
