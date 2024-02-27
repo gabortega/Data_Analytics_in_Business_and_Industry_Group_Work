@@ -1,7 +1,9 @@
+lifetimes
 numpy
 pandas
 scikit-learn
 kmodes
+plotly
 tqdm
 matplotlib
 seaborn
